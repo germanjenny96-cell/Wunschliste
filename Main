@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🎄 Wunschliste Weihnachten 🎁</title>
+  <style>
+    body {
+      background: #f2f9f4;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: #1e293b;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(30,41,59,0.1);
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      color: #0f172a;
+    }
+    .wish-list {
+      margin-top: 20px;
+    }
+    .wish-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .wish-item input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+    }
+    button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 10px;
+      background: #0d9488;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button.secondary {
+      background: #10b981;
+    }
+    label {
+      font-weight: 600;
+      margin-top: 12px;
+      display: block;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+      margin-top: 6px;
+      resize: vertical;
+      min-height: 80px;
+    }
+    .section {
+      margin-top: 20px;
+    }
+    .submitted-list {
+      margin-top: 30px;
+      background: #e6fffa;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .submitted-list h2 {
+      margin-top: 0;
+    }
+    .submitted-list ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎄 Wunschliste Weihnachten</h1>
+
+    <label for="name">Name</label>
+    <input id="name" type="text" placeholder="z. B. Lina">
+
+    <div class="section">
+      <label>Wünsche</label>
+      <div id="wishes" class="wish-list">
+        <div class="wish-item">
+          <input type="text" placeholder="Mein Wunsch">
+        </div>
+      </div>
+      <button id="addWishBtn" class="secondary">+ weiteren Wunsch hinzufügen</button>
+    </div>
+
+    <label for="why">Warum ich mir das wünsche</label>
+    <textarea id="why" placeholder="Kurz warum"></textarea>
+
+    <label for="when">Wann ich’s gern hätte</label>
+    <input id="when" type="text" placeholder="z. B. bis 24.12.2025 oder offen">
+
+    <label for="prio">Priorität</label>
+    <select id="prio">
+      <option value="keine">keine</option>
+      <option value="nice-to-have">Nice to have</option>
+      <option value="wichtig">Wichtig</option>
+    </select>
+
+    <label for="note">Extra Notiz (optional)</label>
+    <textarea id="note" placeholder="z. B. Größe, Farbe, Allergien, etc."></textarea>
+
+    <button id="submitBtn">Absenden</button>
+
+    <div class="submitted-list" id="submittedList" style="display:none;">
+      <h2>Deine eingereichten Wünsche</h2>
+      <ul id="listItems"></ul>
+    </div>
+  </div>
+
+  <script>
+    const addWishBtn = document.getElementById('addWishBtn');
+    const wishesContainer = document.getElementById('wishes');
+    const submitBtn = document.getElementById('submitBtn');
+    const submittedListDiv = document.getElementById('submittedList');
+    const listItemsUl = document.getElementById('listItems');
+
+    addWishBtn.addEventListener('click', () => {
+      const div = document.createElement('div');
+      div.className = 'wish-item';
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.placeholder = 'Mein Wunsch';
+      div.appendChild(inp);
+      wishesContainer.appendChild(div);
+    });
+
+    submitBtn.addEventListener('click', () => {
+      const name = document.getElementById('name').value.trim();
+      const why = document.getElementById('why').value.trim();
+      const when = document.getElementById('when').value.trim();
+      const prio = document.getElementById('prio').value;
+      const note = document.getElementById('note').value.trim();
+      const wishInputs = wishesContainer.querySelectorAll('input');
+      const wishes = Array.from(wishInputs).map(i => i.value.trim()).filter(v => v);
+
+      if (!name || wishes.length === 0) {
+        alert('Bitte trage deinen Namen und mindestens einen Wunsch ein.');
+        return;
+      }
+
+      // Anzeige der Wünsche unten auf der Seite
+      listItemsUl.innerHTML = '';
+      wishes.forEach((w, i) => {
+        const li = document.createElement('li');
+        li.textContent = `Wunsch ${i+1}: ${w}`;
+        listItemsUl.appendChild(li);
+      });
+      const extraLi = document.createElement('li');
+      extraLi.textContent = `Warum: ${why}`;
+      listItemsUl.appendChild(extraLi);
+      const extraLi2 = document.createElement('li');
+      extraLi2.textContent = `Wann: ${when}`;
+      listItemsUl.appendChild(extraLi2);
+      const extraLi3 = document.createElement('li');
+      extraLi3.textContent = `Priorität: ${prio}`;
+      listItemsUl.appendChild(extraLi3);
+      if (note) {
+        const extraLi4 = document.createElement('li');
+        extraLi4.textContent = `Extra Notiz: ${note}`;
+        listItemsUl.appendChild(extraLi4);
+      }
+
+      submittedListDiv.style.display = 'block';
+
+      // TODO: Hier würden wir die Daten an Google Sheet schicken
+
+      // leere Formularfelder oder nicht? Hier könnte man Felder zurücksetzen
+    });
+  </script>
+</body>
+</html>

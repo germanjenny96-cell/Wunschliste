@@ -50,6 +50,7 @@
     }
     button.secondary {
       background: #10b981;
+      margin-left: 8px;
     }
     label {
       font-weight: 600;
@@ -85,7 +86,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>🎄 Wunschliste Weihnachten</h1>
+    <h1>🎄 Wunschliste Weihnachten 🎁</h1>
 
     <label for="name">Name</label>
     <input id="name" type="text" placeholder="z. B. Lina">
@@ -179,9 +180,8 @@
 
       submittedListDiv.style.display = 'block';
 
-      // TODO: Hier würden wir die Daten an Google Sheet schicken
+      // TODO: Hier könnten wir die Daten an Google Sheet schicken
 
-      // leere Formularfelder oder nicht? Hier könnte man Felder zurücksetzen
     });
   </script>
 </body>
